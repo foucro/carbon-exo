@@ -1,10 +1,8 @@
 var inputTxt = "";
-var inputLines = [];
 var game;
 var board;
 
 function readInput(ev) {
-  console.log(ev);
   if (!ev.target.file?.length) {
     var re = new FileReader();
     re.onloadend = () => {
@@ -19,7 +17,6 @@ function readInput(ev) {
 
 function initGame() {
   game = new Game(inputTxt);
-  game.verifyData();
 
   if (game.isValid) {
     game.generateBoard();
@@ -28,14 +25,26 @@ function initGame() {
 }
 
 function nextstep() {
-  game.nextStep();
-}
+    game.nextStep();
+  }
+  function allSteps() {
+    game.allSteps();
+  }
 
 function createButtons() {
   var body = document.getElementsByTagName("body")[0];
+
   var btn = document.createElement("BUTTON");
   btn.setAttribute("id", "nextBtn");
   btn.innerText = "Next step";
   btn.addEventListener("click", nextstep);
   body.appendChild(btn);
+
+  btn = document.createElement("BUTTON");
+  btn.setAttribute("id", "allBtn");
+  btn.innerText = "All steps";
+  btn.addEventListener("click", allSteps);
+  body.appendChild(btn);
+
+
 }

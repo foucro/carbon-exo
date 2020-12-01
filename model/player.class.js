@@ -42,6 +42,10 @@ class Player {
  
     
     playRound(i, isForwardPossible) {
+        if(this.path.length <= i){
+            if(this.path.length == i)
+            console.info(this.name+' has complete his path.')
+            return;}
       switch (this.path[i]) {
         case "A":
           if (isForwardPossible) this.moveForward();

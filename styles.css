@@ -1,0 +1,39 @@
+#container{
+font-weight: bold;
+    margin: auto;
+    position:relative;
+    width: fit-content;
+
+    color: lightyellow;
+}
+
+table{
+    margin: auto;
+}
+table td {
+    width: 85px;
+    height: 85px;
+
+}
+td, .perso{
+    background: no-repeat center ;
+    background-size: cover;
+}
+td.plaine{
+    background-image: url('./img/forest.jpeg');
+}
+td.montagne{
+    background-image: url('./img/montain.jpg');
+}
+td.tresor{
+    background-image: url('./img/treasure.jpeg');
+}
+div.perso{
+
+    background-size: contain;
+    position: absolute;
+    width: 85px;
+    height: 85px;
+    background-image: url('./img/perso.png');
+    transition-duration: 1.1s;
+}

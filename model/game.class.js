@@ -1,62 +1,81 @@
+//Manages the Game
 class Game {
-  mountains = [];
-  treasures = [];
+  boardData = {
+    zone: [],
+    players: [],
+    mountains: [],
+    treasures: [],
+  };
+
   isValid = true;
-  players = [];
   board;
   step = 0;
   stepMax = 0;
   loop;
 
+  //check data and fill board data
   constructor(inputData) {
     Game.formatInput(inputData).forEach((el) => {
       let firstletter = el.substr(0, 1);
       switch (firstletter) {
+        //   MAP
         case "C":
-          this.zone = el.split("-");
-          this.zone.shift();
-          if (!Game.isNum(this.zone[0]) || !Game.isNum(this.zone[1])) {
+          this.boardData.zone = el.split("-").map((x) => parseInt(x));
+          this.boardData.zone.shift();
+          if (
+            this.boardData.zone.length != 2 ||
+            isNaN(this.boardData.zone[0]) ||
+            isNaN(this.boardData.zone[1])
+          ) {
             this.isValid = false;
             console.error("Board dimension not defined");
             return;
           }
-
           break;
+
+        // MOUNTAINS
         case "M":
-          let m = el.split("-");
+          let m = el.split("-").map((x) => parseInt(x));
           m.shift();
-          if (!Game.isNum(m[0]) || !Game.isNum(m[1])) {
+          if (isNaN(m[0]) || isNaN(m[1]) || this.isOut(m[0], m[1])) {
             console.warn("Line '" + el + "' has been skipped");
             return;
           }
-          this.mountains.push(m);
-
+          this.boardData.mountains.push(m);
           break;
+
+        //   TREASURES
         case "T":
-          let t = el.split("-");
+          let t = el.split("-").map((x) => parseInt(x));
           t.shift();
-          if (!Game.isNum(t[0]) || !Game.isNum(t[1]) || !Game.isNum(t[2])) {
+          if (
+            isNaN(t[0]) ||
+            isNaN(t[1]) ||
+            isNaN(t[2]) ||
+            this.isOut(t[0], t[1])
+          ) {
             console.warn("Line '" + el + "' has been skipped");
             return;
           }
-          this.treasures.push(t);
-
+          this.boardData.treasures.push(t);
           break;
+
+        //   PLAYERS
         case "A":
           let a = el.split("-");
           if (
             a.length != 6 ||
             !Game.isNum(a[2]) ||
             !Game.isNum(a[3]) ||
-            Player.ways.indexOf(a[4]) == -1
+            Player.ways.indexOf(a[4]) == -1 ||
+            this.isOut(parseInt(a[2]), parseInt(a[3]))
           ) {
             console.warn("Line '" + el + "' has been skipped");
             return;
           }
-          let p = new Player(a[1], a[2], a[3], a[4], a[5]);
+          let p = new Player(a[1], parseInt(a[2]), parseInt(a[3]), a[4], a[5]);
           if (this.stepMax < a[5].length) this.stepMax = a[5].length;
-          this.players.push(p);
-
+          this.boardData.players.push(p);
           break;
 
         default:
@@ -65,72 +84,41 @@ class Game {
       }
     });
 
-    this.verifyData();
-  }
-
-  static isNum(str) {
-    return !isNaN(parseInt(str));
-  }
-
-  static formatInput(inputTxt) {
-    inputTxt = inputTxt
-      .replace(/ /g, "")
-      .replace(/^#.*$/gm, "")
-      .replace(/^[\n]/gm, "");
-
-    return inputTxt.split("\n");
-  }
-  
-  verifyData() {
-    if (this.zone?.length != 2) {
-      this.isValid = false;
-      console.error("Board dimension not defined");
-      return;
-    }
-
-    if (!this.treasures?.length || !this.players?.length) {
-      console.error("Lack of data");
+    if (!this.boardData.treasures.length || !this.boardData.players.length) {
+      console.error("Lack of player or treasure");
       this.isValid = false;
     }
-
-    //FIXME
-    this.mountains.forEach((e) => {
-      if (e[0] >= this.zone[0] || e[1] >= this.zone[1]) {
-        console.error("Montain out of bound");
-        this.isValid = false;
-      }
-    });
-    this.treasures.forEach((e) => {
-      if (e[0] >= this.zone[0] || e[1] >= this.zone[1]) {
-        console.error("Treasure out of bound");
-        this.isValid = false;
-      }
-    });
-    this.players.forEach((e) => {
-      if (e.i >= this.zone[0] || e.j >= this.zone[1]) {
-        console.error(e.name + " out of bound");
-        this.isValid = false;
-      }
-    });
   }
+
+  //check if item is out of bounds
+  isOut(i, j) {
+    return (
+      i < 0 ||
+      j < 0 ||
+      i >= this.boardData.zone[0] ||
+      j >= this.boardData.zone[1]
+    );
+  }
+
   generateBoard() {
-    this.board = new Board(this);
+    this.board = new Board(this.boardData);
     this.board.generate();
   }
 
+  //Play one more round
   nextStep() {
-    this.players.forEach((player) => {
+    this.boardData.players.forEach((player) => {
       player.playRound(this.step, this.canGoForward(player));
     });
     this.board.updatePlayers();
-
-    if (this.stepMax == this.step) {
+    if (this.loop && this.stepMax == this.step) {
       clearInterval(this.loop);
       return;
     }
     this.step++;
   }
 
+  //play all rounds until the end
   allSteps() {
     this.nextStep();
     this.loop = setInterval.call(
@@ -140,36 +128,40 @@ class Game {
     );
   }
 
+  //check if a player can move forward
   canGoForward(player) {
     let sim = new Player();
     Object.assign(sim, player);
-
     sim.moveForward();
 
-    if (
-      sim.i < 0 ||
-      sim.j < 0 ||
-      sim.i > this.zone[0] - 1 ||
-      sim.j > this.zone[1] - 1
-    ) {
+    if (this.isOut([sim.i],[sim.j])) {
       console.info("Player " + player.name + " faces the border");
       return false;
     }
+    if (
+      this.board.matrix[sim.j][sim.i] !== "P" &&
+      isNaN(this.board.matrix[sim.j][sim.i])
+    ) {
+      console.info("Player " + player.name + " faces a mountain or a player");
+      return false;
+    }
+      return true;
+    }
+  
 
-    this.mountains.forEach((m) => {
-      if (m[0] == sim.i && m[1] == sim.j) {
-        console.info("Player " + player.name + " faces a mountain");
-        return false;
-      }
-    });
-    this.players.forEach((p) => {
-      if (p.i == sim.i && p.j == sim.j) {
-        console.info("Player " + player.name + " faces player" + p.name);
-        return false;
-      }
-    });
+  //Check if there is an int in str
+  static isNum(str) {
+    return !isNaN(parseInt(str));
+  }
 
-    return true;
+  //remove space and return an array with the lines
+  static formatInput(inputTxt) {
+    inputTxt = inputTxt
+      .replace(/ /g, "")
+      .replace(/^#.*$/gm, "")
+      .replace(/^[\n]/gm, "");
+
+    return inputTxt.split("\n");
   }
 }
 

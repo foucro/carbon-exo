@@ -1,6 +1,7 @@
 var inputTxt = "";
 var game;
 
+//called when a new file is uploaded
 function readInput(ev) {
   if (!ev.target.file?.length) {
     var re = new FileReader();
@@ -15,19 +16,20 @@ function readInput(ev) {
 }
 
 function initGame() {
-    Board.destroy();
+  Board.destroy();
   game = new Game(inputTxt);
 
   if (game.isValid) {
     game.generateBoard();
-    if(!document.getElementById('allBtn'))
-    createButtons();
+   // if (!document.getElementById("allBtn")) createButtons();
+   document.getElementById("btnContainer").style.display = 'block';
   }
 }
-
-function nextstep() {
+//called on click
+function nextStep() {
   game.nextStep();
 }
+//called on click
 function allSteps() {
   game.allSteps();
 }
@@ -38,7 +40,7 @@ function createButtons() {
   var btn = document.createElement("BUTTON");
   btn.setAttribute("id", "nextBtn");
   btn.innerText = "Next step";
-  btn.addEventListener("click", nextstep);
+  btn.addEventListener("click", nextStep);
   body.appendChild(btn);
 
   btn = document.createElement("BUTTON");

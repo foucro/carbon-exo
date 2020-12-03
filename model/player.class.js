@@ -1,9 +1,10 @@
 class Player {
   nbTreasures = 0;
   static ways = ["S", "O", "N", "E"];
-  oldi
-  oldj
-  lastMove = false;  //or ADG
+  //old position
+  oldi;
+  oldj;
+  lastMove = false; //or ADG
 
   constructor(name, i, j, sens, path) {
     this.name = name;
@@ -29,7 +30,7 @@ class Player {
         break;
 
       default:
-        console.error("error code 5451 :)");
+        console.error("error code 1337 :)");
         break;
     }
   }
@@ -41,20 +42,20 @@ class Player {
     var i = Player.ways.indexOf(this.sens);
     this.sens = Player.ways[--i % 4];
   }
-
+  //  plays nth round
   playRound(n, isForwardPossible) {
     if (this.path.length <= n) {
       if (this.path.length == n)
         console.info(this.name + " has complete his path.");
       return;
     }
-    this.oldi=this.i
-    this.oldj=this.j
-    this.lastMove = this.path[n]
+    this.oldi = this.i;
+    this.oldj = this.j;
+    this.lastMove = this.path[n];
     switch (this.path[n]) {
       case "A":
-        if (isForwardPossible) this.moveForward(); 
-        else this.lastMove = false
+        if (isForwardPossible) this.moveForward();
+        else this.lastMove = false;
         break;
       case "D":
         this.turnRight();
@@ -64,11 +65,8 @@ class Player {
         break;
 
       default:
-        console.error("Mouvement " + path[n] + " impossible !");
+        console.error("Impossible to execute this movement :" + path[n] );
         break;
     }
-
-    
-
   }
 }

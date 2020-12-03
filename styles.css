@@ -37,3 +37,6 @@ div.perso{
     background-image: url('./img/perso.png');
     transition-duration: 1s;
 }
+#btnContainer{
+    display: none;
+}

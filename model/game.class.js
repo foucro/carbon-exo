@@ -81,7 +81,7 @@ class Game {
     return inputTxt.split("\n");
   }
   
-  verifyData() {²
+  verifyData() {
     if (this.zone?.length != 2) {
       this.isValid = false;
       console.error("Board dimension not defined");
@@ -173,7 +173,7 @@ class Game {
   }
 }
 
-//------Workaround-------
+//------Workaround to make interval work-------
 var __nativeSI__ = window.setInterval;
 window.setInterval = function (vCallback, nDelay) {
   var oThis = this,

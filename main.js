@@ -1,6 +1,5 @@
 var inputTxt = "";
 var game;
-var board;
 
 function readInput(ev) {
   if (!ev.target.file?.length) {
@@ -16,20 +15,22 @@ function readInput(ev) {
 }
 
 function initGame() {
+    Board.destroy();
   game = new Game(inputTxt);
 
   if (game.isValid) {
     game.generateBoard();
+    if(!document.getElementById('allBtn'))
     createButtons();
   }
 }
 
 function nextstep() {
-    game.nextStep();
-  }
-  function allSteps() {
-    game.allSteps();
-  }
+  game.nextStep();
+}
+function allSteps() {
+  game.allSteps();
+}
 
 function createButtons() {
   var body = document.getElementsByTagName("body")[0];
@@ -45,6 +46,4 @@ function createButtons() {
   btn.innerText = "All steps";
   btn.addEventListener("click", allSteps);
   body.appendChild(btn);
-
-
 }

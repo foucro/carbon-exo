@@ -1,66 +1,74 @@
-
 class Player {
-    nbTreasures = 0;
-    static ways = ["S", "O", "N", "E"];
+  nbTreasures = 0;
+  static ways = ["S", "O", "N", "E"];
+  oldi
+  oldj
+  lastMove = false;  //or ADG
 
-    constructor(name, i, j, sens, path) {
-      this.name = name;
-      this.i = parseInt(i);
-      this.j = parseInt(j);
-      this.sens = sens;
-      this.path = path;
-    }
+  constructor(name, i, j, sens, path) {
+    this.name = name;
+    this.i = parseInt(i);
+    this.j = parseInt(j);
+    this.sens = sens;
+    this.path = path;
+  }
 
-    moveForward() {
-      switch (this.sens) {
-        case "N":
-          this.j--;
-          break;
-        case "S":
-          this.j++;
-          break;
-        case "O":
-          this.i--;
-          break;
-        case "E":
-          this.i++;
-          break;
-  
-        default:
-          console.error("error code 5451 :)");
-          break;
-      }
-    }
-    turnRight() {
-      var i = Player.ways.indexOf(this.sens);
-      this.sens = Player.ways[++i % 4];
-    }
-    turnLeft() {
-      var i = Player.ways.indexOf(this.sens);
-      this.sens = Player.ways[--i % 4];
-    }
- 
-    
-    playRound(i, isForwardPossible) {
-        if(this.path.length <= i){
-            if(this.path.length == i)
-            console.info(this.name+' has complete his path.')
-            return;}
-      switch (this.path[i]) {
-        case "A":
-          if (isForwardPossible) this.moveForward();
-          break;
-        case "D":
-          this.turnRight();
-          break;
-        case "G":
-          this.turnLeft();
-          break;
-  
-        default:
-          console.error("Mouvement " + path[i] + " impossible !");
-          break;
-      }
+  moveForward() {
+    switch (this.sens) {
+      case "N":
+        this.j--;
+        break;
+      case "S":
+        this.j++;
+        break;
+      case "O":
+        this.i--;
+        break;
+      case "E":
+        this.i++;
+        break;
+
+      default:
+        console.error("error code 5451 :)");
+        break;
     }
   }
-  
+  turnRight() {
+    var i = Player.ways.indexOf(this.sens);
+    this.sens = Player.ways[++i % 4];
+  }
+  turnLeft() {
+    var i = Player.ways.indexOf(this.sens);
+    this.sens = Player.ways[--i % 4];
+  }
+
+  playRound(n, isForwardPossible) {
+    if (this.path.length <= n) {
+      if (this.path.length == n)
+        console.info(this.name + " has complete his path.");
+      return;
+    }
+    this.oldi=this.i
+    this.oldj=this.j
+    this.lastMove = this.path[n]
+    switch (this.path[n]) {
+      case "A":
+        if (isForwardPossible) this.moveForward(); 
+        else this.lastMove = false
+        break;
+      case "D":
+        this.turnRight();
+        break;
+      case "G":
+        this.turnLeft();
+        break;
+
+      default:
+        console.error("Mouvement " + path[n] + " impossible !");
+        break;
+    }
+
+    
+
+  }
+}

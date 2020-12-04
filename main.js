@@ -21,8 +21,8 @@ function initGame() {
 
   if (game.isValid) {
     game.generateBoard();
-   // if (!document.getElementById("allBtn")) createButtons();
-   document.getElementById("btnContainer").style.display = 'block';
+    // if (!document.getElementById("allBtn")) createButtons();
+    document.getElementById("btnContainer").style.display = "block";
   }
 }
 //called on click

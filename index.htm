@@ -17,7 +17,21 @@
     <div id="container"></div>
     <div id="btnContainer">
       <button id="nextBtn" onclick="nextStep()">Next Step</button>
-      <button id="allBtn" onclick="allSteps()")>All Steps</button>
+      <button id="allBtn" onclick="allSteps(700)">All Steps</button>
+      <button id="endBtn" onclick="allSteps(1)">To the end</button>
+    </div>
+
+    <div id="outContainer">
+      <textarea
+        name="output"
+        readonly
+        id="output"
+        cols="30"
+        rows="10"
+      ></textarea>
+      <button>
+        <a id="download" download="output.txt" href="">Download</a>
+      </button>
     </div>
 
     <script src="./model/game.class.js"></script>

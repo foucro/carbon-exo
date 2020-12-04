@@ -42,11 +42,11 @@ class Player {
     var i = Player.ways.indexOf(this.sens);
     this.sens = Player.ways[--i % 4];
   }
-  //  plays nth round
+  //  plays the nth round
   playRound(n, isForwardPossible) {
     if (this.path.length <= n) {
       if (this.path.length == n)
-        console.info(this.name + " has complete his path.");
+        console.info(this.name + " has completed his path.");
       return;
     }
     this.oldi = this.i;
@@ -65,7 +65,7 @@ class Player {
         break;
 
       default:
-        console.error("Impossible to execute this movement :" + path[n] );
+        console.error("Impossible to execute this movement :" + path[n]);
         break;
     }
   }

@@ -23,10 +23,10 @@ class Board {
     var tbl = document.createElement("table");
     this.tblBody = document.createElement("tbody");
 
-    for (let i = 0; i < this.game.zone[1]; i++) {
+    for (let i = 0; i < this.game.zone[2]; i++) {
       var row = document.createElement("tr");
       this.matrix.push([]);
-      for (let j = 0; j < this.game.zone[0]; j++) {
+      for (let j = 0; j < this.game.zone[1]; j++) {
         var cell = document.createElement("td");
         cell.setAttribute("class", "plaine");
         row.appendChild(cell);
@@ -40,16 +40,16 @@ class Board {
 
   createMountains() {
     this.game.mountains.forEach((el) => {
-      this.getCell(el[0], el[1]).setAttribute("class", "montagne");
-      this.matrix[el[1]][el[0]] = "M";
+      this.getCell(el[1], el[2]).setAttribute("class", "montagne");
+      this.matrix[el[2]][el[1]] = "M";
     });
   }
   createTreasures() {
     this.game.treasures.forEach((el) => {
-      this.getCell(el[0], el[1]).textContent = "" + el[2];
-      this.getCell(el[0], el[1]).setAttribute("class", "tresor");
+      this.getCell(el[1], el[2]).textContent = "" + el[3];
+      this.getCell(el[1], el[2]).setAttribute("class", "tresor");
 
-      this.matrix[el[1]][el[0]] = el[2];
+      this.matrix[el[2]][el[1]] = el[3];
     });
   }
 

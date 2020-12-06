@@ -1,3 +1,5 @@
+"use strict";
+
 var inputTxt = "";
 var game;
 
@@ -21,8 +23,8 @@ function initGame() {
 
   if (game.isValid) {
     game.generateBoard();
-    // if (!document.getElementById("allBtn")) createButtons();
     document.getElementById("btnContainer").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
   }
 }
 //called on click
@@ -30,22 +32,6 @@ function nextStep() {
   game.nextStep();
 }
 //called on click
-function allSteps() {
-  game.allSteps();
-}
-
-function createButtons() {
-  var body = document.getElementsByTagName("body")[0];
-
-  var btn = document.createElement("BUTTON");
-  btn.setAttribute("id", "nextBtn");
-  btn.innerText = "Next step";
-  btn.addEventListener("click", nextStep);
-  body.appendChild(btn);
-
-  btn = document.createElement("BUTTON");
-  btn.setAttribute("id", "allBtn");
-  btn.innerText = "All steps";
-  btn.addEventListener("click", allSteps);
-  body.appendChild(btn);
+function allSteps(ms) {
+  game.allSteps(ms);
 }

@@ -7,13 +7,16 @@
     <title>Chasse aux trésors</title>
   </head>
   <body>
-    <input
-      type="file"
-      name="inputdata"
-      id="inputdata"
-      accept="text/plain"
-      onchange="readInput(event)"
-    />
+    <div id="titleContainer">
+      <h1>La carte aux trésors</h1>
+      <input
+        type="file"
+        name="inputdata"
+        id="inputdata"
+        accept="text/plain"
+        onchange="readInput(event)"
+      />
+    </div>
     <div id="container"></div>
     <div id="btnContainer">
       <button id="nextBtn" onclick="nextStep()">Next Step</button>
@@ -22,6 +25,7 @@
     </div>
 
     <div id="outContainer">
+      <h2>Results</h2>
       <textarea
         name="output"
         readonly

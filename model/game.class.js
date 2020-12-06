@@ -1,3 +1,5 @@
+"use strict";
+
 //Manages the Game
 class Game {
   boardData = {
@@ -20,7 +22,7 @@ class Game {
       switch (firstletter) {
         //   MAP
         case "C":
-          this.boardData.zone = el.split("-").map((x) => parseInt(x) || "C");
+          this.boardData.zone = el.split("-").map((x) => parseInt(x) || x);
           if (
             this.boardData.zone.length != 3 ||
             isNaN(this.boardData.zone[1]) ||
@@ -34,7 +36,7 @@ class Game {
 
         // MOUNTAINS
         case "M":
-          let m = el.split("-").map((x) => (Game.isNum(x) ? parseInt(x) : "M"));
+          let m = el.split("-").map((x) => (Game.isNum(x) ? parseInt(x) : x));
           if (isNaN(m[2]) || isNaN(m[1]) || this.isOut(m[1], m[2])) {
             console.warn("Line '" + el + "' has been skipped");
             return;
@@ -44,7 +46,7 @@ class Game {
 
         //   TREASURES
         case "T":
-          let t = el.split("-").map((x) => (Game.isNum(x) ? parseInt(x) : "T"));
+          let t = el.split("-").map((x) => (Game.isNum(x) ? parseInt(x) : x));
           if (
             isNaN(t[3]) ||
             isNaN(t[1]) ||
@@ -94,10 +96,14 @@ class Game {
 
   //Plays one more round
   nextStep() {
-    this.boardData.players.forEach((player) => {
-      player.playRound(this.step, this.canGoForward(player));
+    this.boardData.players.forEach((player, i) => {
+      if (player.path.length > this.step) {
+        player.playRound(this.step, this.canGoForward(player));
+        this.board.updatePlayer(i);
+        if (player.path.length - 1 === this.step)
+          console.info(player.name + " has completed his path.");
+      } else if (player.path.length === this.step) player.lastMove = false;
     });
-    this.board.updatePlayers();
     if (this.stepMax == ++this.step) {
       this.finish();
       return;
@@ -110,21 +116,21 @@ class Game {
     if (this.loop) clearInterval(this.loop);
     document.getElementById("outContainer").style.display = "block";
     document.getElementById("output").textContent = out;
-
-    let data = new Blob([out], { type: "text/plain" });
+    let title =
+      "###############################\n##          Results          ##\n###############################\n";
+    let data = new Blob([title, out], { type: "text/plain" });
     let textFile = window.URL.createObjectURL(data);
 
     document.getElementById("download").href = textFile;
+
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
-  //plays all rounds until the end with an interval of ms milliseconds
+  //plays all rounds until the end with an interval
   allSteps(ms) {
+    if (!ms) ms = 700;
     this.nextStep();
-    this.loop = setInterval.call(
-      this,
-      this.nextStep,
-      this.boardData.players.length * ms
-    );
+    this.loop = setInterval.call(this, this.nextStep, parseInt(ms));
   }
 
   //checks if a player can move forward
@@ -134,14 +140,14 @@ class Game {
     sim.moveForward();
 
     if (this.isOut([sim.i], [sim.j])) {
-      console.info("Player " + player.name + " faces the border");
+      //console.info("Player " + player.name + " faces the border");
       return false;
     }
     if (
       this.board.matrix[sim.j][sim.i] !== "P" &&
       isNaN(this.board.matrix[sim.j][sim.i])
     ) {
-      console.info("Player " + player.name + " faces a mountain or a player");
+      //console.info("Player " + player.name + " faces a mountain or a player");
       return false;
     }
     return true;
@@ -177,7 +183,7 @@ class Game {
     });
     return out;
   }
-  
+
   //checks if item is out of bounds
   isOut(i, j) {
     return (

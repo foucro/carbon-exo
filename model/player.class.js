@@ -1,3 +1,5 @@
+"use strict";
+
 class Player {
   nbTreasures = 0;
   static ways = ["S", "O", "N", "E"];
@@ -40,13 +42,11 @@ class Player {
   }
   turnLeft() {
     var i = Player.ways.indexOf(this.sens);
-    this.sens = Player.ways[--i % 4];
+    this.sens = i ? Player.ways[--i % 4] : Player.ways[3];
   }
   //  plays the nth round
   playRound(n, isForwardPossible) {
     if (this.path.length <= n) {
-      if (this.path.length == n)
-        console.info(this.name + " has completed his path.");
       return;
     }
     this.oldi = this.i;

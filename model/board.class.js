@@ -1,3 +1,5 @@
+"use strict";
+
 // Manages the graphic part and contains a real time matrix with all board data
 class Board {
   tblBody;
@@ -67,24 +69,22 @@ class Board {
     });
   }
 
-  updatePlayers() {
-    for (let i = 0; i < this.playersDiv.length; i++) {
-      let p = this.game.players[i];
-      if (!!p.lastMove) {
-        //Update graphic
-        Board.setPositionPlayer(this.playersDiv[i], p);
+  updatePlayer(i) {
+    let p = this.game.players[i];
+    if (!!p.lastMove) {
+      //update matrix
+      this.matrix[p.oldj][p.oldi] = this.matrix[p.oldj][p.oldi][0];
+      this.matrix[p.j][p.i] = [this.matrix[p.j][p.i], p];
 
-        //update matrix
-        this.matrix[p.oldj][p.oldi] = this.matrix[p.oldj][p.oldi][0];
-        this.matrix[p.j][p.i] = [this.matrix[p.j][p.i], p];
-
-        //Update treasures
-        if (p.lastMove === "A" && parseInt(this.matrix[p.j][p.i][0]) > 0) {
-          this.matrix[p.j][p.i][0]--;
-          p.nbTreasures++;
-          this.getCell(p.i, p.j).textContent = "" + this.matrix[p.j][p.i][0];
-        }
+      //Update treasures
+      if (p.lastMove === "A" && parseInt(this.matrix[p.j][p.i][0]) > 0) {
+        this.matrix[p.j][p.i][0]--;
+        p.nbTreasures++;
+        this.getCell(p.i, p.j).textContent = "" + this.matrix[p.j][p.i][0];
       }
+
+      //Update graphic
+      Board.setPositionPlayer(this.playersDiv[i], p);
     }
   }
 
@@ -97,7 +97,13 @@ class Board {
 
   //  calculus of div position
   static setPositionPlayer(div, player) {
-    div.textContent = player.name + "(" + player.sens + ")";
+    div.textContent =
+      player.name.substring(0, 7) +
+      "(" +
+      player.sens +
+      ";" +
+      player.nbTreasures +
+      ")";
     div.style.top = 4 + 89 * player.j + "px";
     div.style.left = 4 + 89 * player.i + "px";
   }

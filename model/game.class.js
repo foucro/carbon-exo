@@ -83,7 +83,11 @@ class Game {
       }
     });
 
-    if (!this.boardData.treasures.length || !this.boardData.players.length) {
+    if (
+      !this.boardData.treasures.length ||
+      !this.boardData.players.length ||
+      !this.boardData.zone.length
+    ) {
       console.error("Lack of player or treasure");
       this.isValid = false;
     }
@@ -106,7 +110,6 @@ class Game {
     });
     if (this.stepMax == ++this.step) {
       this.finish();
-      return;
     }
   }
 
@@ -169,17 +172,7 @@ class Game {
     });
     this.boardData.players.forEach((p) => {
       out +=
-        "A - " +
-        p.name +
-        " - " +
-        p.i +
-        " - " +
-        p.j +
-        " - " +
-        p.sens +
-        " - " +
-        p.nbTreasures +
-        "\n";
+        `A - ${p.name} - ${p.i} - ${p.j} - ${p.sens} - ${p.nbTreasures}\n`;
     });
     return out;
   }
@@ -187,6 +180,7 @@ class Game {
   //checks if item is out of bounds
   isOut(i, j) {
     return (
+      this.boardData.zone.length != 3 ||
       i < 0 ||
       j < 0 ||
       i >= this.boardData.zone[1] ||

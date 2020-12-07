@@ -30,7 +30,7 @@ class Board {
       this.matrix.push([]);
       for (let j = 0; j < this.game.zone[1]; j++) {
         var cell = document.createElement("td");
-        cell.setAttribute("class", "plaine");
+        cell.classList.add("plaine");
         row.appendChild(cell);
         this.matrix[i].push("P");
       }
@@ -42,14 +42,14 @@ class Board {
 
   createMountains() {
     this.game.mountains.forEach((el) => {
-      this.getCell(el[1], el[2]).setAttribute("class", "montagne");
+      this.getCell(el[1], el[2]).setAttribute("class","montagne");
       this.matrix[el[2]][el[1]] = "M";
     });
   }
   createTreasures() {
     this.game.treasures.forEach((el) => {
       this.getCell(el[1], el[2]).textContent = "" + el[3];
-      this.getCell(el[1], el[2]).setAttribute("class", "tresor");
+      this.getCell(el[1], el[2]).setAttribute("class","tresor");
 
       this.matrix[el[2]][el[1]] = el[3];
     });
@@ -61,7 +61,7 @@ class Board {
     this.game.players.forEach((el) => {
       var div = document.createElement("div");
       cont.appendChild(div);
-      div.setAttribute("class", "perso");
+      div.classList.add("perso");
       Board.setPositionPlayer(div, el);
       this.playersDiv.push(div);
 
@@ -97,18 +97,14 @@ class Board {
 
   //  calculus of div position
   static setPositionPlayer(div, player) {
-    div.textContent =
-      player.name.substring(0, 7) +
-      "(" +
-      player.sens +
-      ";" +
-      player.nbTreasures +
-      ")";
+    div.textContent = `
+      ${player.name.substring(0, 7)}
+      (${player.sens};${player.nbTreasures})`;
     div.style.top = 4 + 89 * player.j + "px";
     div.style.left = 4 + 89 * player.i + "px";
   }
+
   static destroy() {
-    var cont = document.getElementById("container");
-    cont.innerHTML = "";
+    document.getElementById("container").innerHTML = "";
   }
 }

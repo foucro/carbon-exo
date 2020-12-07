@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="./styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chasse aux trésors</title>
+    <title>TESTS</title>
   </head>
   <body>
+    <h1>Unit Tests</h1>
+    <div id="testContainer"></div>
     <div id="container"></div>
 
     <script src="../model/game.class.js"></script>
     <script src="../model/board.class.js"></script>
     <script src="../model/player.class.js"></script>
 
-    <script src="../main.js"></script>
-    <script src="./test.js"></script>
+    <script src="./test.utils.js"></script>
+
+    <script src="./game.test.js"></script>
+    <script src="./board.test.js"></script>
+    <script src="./player.test.js"></script>
+
+    <style>
+      table,
+      .perso {
+        display: none;
+      }
+      ul {
+        list-style: none;
+      }
+      h1 {
+        text-align: center;
+      }
+      #testContainer {
+        width: fit-content;
+        margin: auto;
+      }
+    </style>
   </body>
 </html>
